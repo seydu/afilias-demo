@@ -40,13 +40,16 @@
 
 
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <script type="text/javascript" 
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYDI2oJKL73riaHmA0j4S6trGlFpwkZE0&signed_in=true&callback=initMap"
-        async defer></script>
-        <script src="/js/jquery-1.11.3.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="/css/geocomplete.css" />
+        <script src="http://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script src="/js/moustache-master.js" type="text/javascript"></script>
         <script src="/js/jquery.mustache.js" type="text/javascript"></script>
+        <script src="/js/jquery.geocomplete.js"></script>
+        <script src="/js/geocomplete.logger.js"></script>
+        
         <script src="/js/jquery.mustache.bootstrap.js" type="text/javascript"></script>
+        
 
 
     </head>
@@ -73,18 +76,49 @@
                 <p>
                     <h2>Address location</h2>
                     <div>
-                        <form > 
-                            <ul>
-                                <li> <span>Address</span> <input id="demo-address" type="text" name="demo_address[address]" class="demo-address"/>
-                            </ul>
-                        </form>
+                        <form>
+                            <input id="geocomplete" type="text" placeholder="Type in an address" size="90" />
+                            <input id="find" type="button" value="find" />
+                          </form>
                     </div>
-                <div id="map"></div>
                 </p>
+                <div style="height: 200px">
+                <div id="map" class="map_canvas"></div>
+                </div>
             </div>
 
         </div>
+    <pre id="logger">Log:</pre>
     </div>
+    <script>
+      $(function(){
+        
+        var options = {
+          map: ".map_canvas"
+        };
+        console.log("script, length="+$('#geocomplete').length);
+        $("#geocomplete").geocomplete(options)
+          .bind("geocode:result", function(event, result){
+            $.log("Result: " + result.formatted_address);
+          })
+          .bind("geocode:error", function(event, status){
+            $.log("ERROR: " + status);
+          })
+          .bind("geocode:multiple", function(event, results){
+            $.log("Multiple: " + results.length + " results found");
+          });
+        
+        $("#find").click(function(){
+          $("#geocomplete").trigger("geocode");
+        });
+        
+        $("#examples a").click(function(){
+          $("#geocomplete").val($(this).text()).trigger("geocode");
+          return false;
+        });
+        
+      });
+    </script>
 {% endblock %}
 
         {% block javascripts %}{% endblock %}
