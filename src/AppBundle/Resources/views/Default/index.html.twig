@@ -40,14 +40,43 @@
 
 
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-        <script type="text/javascript" 
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYDI2oJKL73riaHmA0j4S6trGlFpwkZE0&signed_in=true&callback=initMap"
-        async defer></script>
+        <script type="text/javascript">
+            function initMap(adr) {
+                console.log('Init map');
+                $('#demo-address').change(function(event) {
+                    console.log("$(this).val()="+$(this).val());
+                    pinAddress($(this).val());
+                });
+                
+                var gapiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy0RByTQl7pQ1HwW9IxwgYmQemJKjUklA&address=';
+                function pinAddress(adr) {
+                    console.log("adr="+adr);
+                    $.ajax(gapiUrl+adr, {
+                         success: function(data) {
+                             var myLatLng = data.results[0].geometry.location;
+                             //{lat: -25.363, lng: 131.044};
+                             var map = new google.maps.Map(document.getElementById('map'), {
+                               zoom: 4,
+                               center: myLatLng
+                             });
+
+                             var marker = new google.maps.Marker({
+                               position: myLatLng,
+                               map: map,
+                               title: data.results[0].formatted_address
+                             });
+                         }
+                     });
+                }
+            }
+        </script>
         <script src="/js/jquery-1.11.3.js" type="text/javascript"></script>
         <script src="/js/moustache-master.js" type="text/javascript"></script>
         <script src="/js/jquery.mustache.js" type="text/javascript"></script>
         <script src="/js/jquery.mustache.bootstrap.js" type="text/javascript"></script>
-
+        <script type="text/javascript" 
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYDI2oJKL73riaHmA0j4S6trGlFpwkZE0&signed_in=true&callback=initMap"
+        async defer></script>
 
     </head>
     <body>
