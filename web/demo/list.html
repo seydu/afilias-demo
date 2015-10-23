@@ -1,0 +1,18 @@
+<script id="demo-list" type="text/html">
+<table> 
+    <th>
+        <td> Name </td>
+        <td> Actions </td>
+    </th>
+        
+    {{#items}}
+    <tr>
+        <td>{{name}}</td>
+        <td>
+            <a href="#edit/{{id}}" class="demo-edit" data-id="{{id}}">Update</a>
+            <a href="#delete/{{id}}" class="demo-delete" data-id="{{id}}">Delete</a>
+        </td>
+    </tr>
+    {{/items}}
+</table>
+</script>

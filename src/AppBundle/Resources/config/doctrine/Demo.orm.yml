@@ -1,0 +1,35 @@
+AppBundle\Entity\Demo:
+  type: entity
+  id:
+    id:
+      type: integer
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string
+      unique: true
+      length: 30
+      nullable: false
+#    nom:
+#      type: string
+#      length: 100
+#      nullable: false
+#    prenom:
+#      type: string
+#      length: 100
+#      nullable: true
+#    dateDeNaissance:
+#      type: date
+#      nullable: true
+#    enterinement:
+#      type: boolean
+#      nullable: true
+#    createdAt:
+#      type: date
+#      nullable: true
+#      column: created_at
+#    updatedAt:
+#      type: date
+#      nullable: true
+#      column: updated_at
