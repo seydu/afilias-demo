@@ -20,8 +20,10 @@
 //                                {name: "Bar"}
 //                            ] }));
 //                });
-           
+             
+           var gapiUrl = 'http://maps.googleapis.com/maps/api/geocode/json?address=';
            listItems();
+           postGeolocation();
            function updateItem(id)
            {
                 $.ajax('/app_dev.php/edit/'+id, {
@@ -35,11 +37,31 @@
                 });
            }
            
-           
+           function postGeolocation(adr) {
+               $.ajax(gapiUrl+adr, {
+                    success: function(data) {
+                        var myLatLng = data.results[0].geometry.location;
+                        $.ajax(
+                        {
+                            type: 'post',
+                            url: 'http://private-2a482-afiliastest.apiary-mock.com/location',
+                            data: {
+                                longitude: myLatLng.lat,
+                                latitude: myLatLng.lng
+                            },
+                            success: function(data) {
+                                $.log('Posted a location: lat='+myLatLng.lat+' lng='+myLatLng.lng)
+                            }
+                        });
+                    }
+                });
+               
+               
+           }
            
            function listItems()
            {
-                $.ajax('/app_dev.php/list', {
+                $.ajax('http://private-2a482-afiliastest.apiary-mock.com/offices', {
                       success: function(data) {
                          $.Mustache.load('/demo/list.html')
                         .done(function () {
@@ -47,11 +69,9 @@
 
                             output.html($.Mustache.render('demo-list', { items: data }));
                             output.find('.demo-edit').click(function(event) {
-                                updateItem($(this).data('id'));
-                            });
-                            output.find('.demo-delete').click(function(event) {
-                                event.preventDefault();
-                                deleteItem($(this).data('id'));
+                                pinAddress($(this).data('address'));
+                            });output.find('.demo-send').click(function(event) {
+                                postGeolocation($(this).data('address'));
                             });
                             
            $('#demo-address').change(function(event) {
@@ -68,7 +88,6 @@
                    });
                    initComplete();
            }
-           
            function deleteItem(id)
            {
                 $.ajax('/app_dev.php/delete/'+id, {
@@ -76,8 +95,7 @@
                         listItems();
                     }
                 });
-           }   
-           var gapiUrl = 'http://maps.googleapis.com/maps/api/geocode/json?address=';
+           } 
            function pinAddress(adr) {
                console.log("adr="+adr);
                $.ajax(gapiUrl+adr, {
