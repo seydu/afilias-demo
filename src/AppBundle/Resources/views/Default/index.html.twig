@@ -48,7 +48,7 @@
                     pinAddress($(this).val());
                 });
                 
-                var gapiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyDy0RByTQl7pQ1HwW9IxwgYmQemJKjUklA&address=';
+                var gapiUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
                 function pinAddress(adr) {
                     console.log("adr="+adr);
                     $.ajax(gapiUrl+adr, {
@@ -75,7 +75,7 @@
         <script src="/js/jquery.mustache.js" type="text/javascript"></script>
         <script src="/js/jquery.mustache.bootstrap.js" type="text/javascript"></script>
         <script type="text/javascript" 
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYDI2oJKL73riaHmA0j4S6trGlFpwkZE0&signed_in=true&callback=initMap"
+                src="https://maps.googleapis.com/maps/api/js?callback=initMap"
         async defer></script>
 
     </head>
